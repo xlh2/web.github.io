@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning……</title>
+  <style type="text/css">
+
+@font-face {
+    font-family: 'ciclefina';
+    src: url('images/cicle-webfont.woff2') format('woff2'),
+	     url('images/cicle-webfont.woff') format('woff'),
+         url('images/ciclefina-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'zantroke';
+    src: url('images/zantroke-webfont.woff2') format('woff2'),
+	     url('images/zantroke-webfont.woff') format('woff'),
+         url('images/zantroke-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+} 
+
+    html,body{
+	margin:0 ;
+ /*	font-size:页面打开时，由用户端的window.innerWidth属性决定*/
+		}
+	html{
+	 font-family:"Helvetica","Arial";
+	 height: 100%;
+	}
+	header{
+	font-family: 'zantroke';
+	height:150px;
+	background:url("images/20193051header.jpg") no-repeat center ;
+	color:white;
+    text-align:center;
+	text-shadow:green 3px 2px ;
+	}
+	header>h1{
+	 margin:0 auto;
+	 padding:10px;
+	 font-size:1.8em;
+	 letter-spacing:0.2em;
+	}
+	header>h1>span{
+	font-size:0.5em;
+	}
+
+	nav{
+	height:50px;
+	margin:18px;
+	}
+    nav span{
+	 font-size: 1.3em;
+	 border:3px outset   ;
+	 background-color:rgb(0,50,0);
+	 border-radius: 15% ;
+	 padding: 0.2em ;
+	 color:rgb(255,255,255) ;
+	 cursor: pointer;
+	 }
+     nav span:hover{
+	  background-color:rgb(0,0,200);
+	 }
+	  .onclickStyle{
+	   border:3px  inset  ;
+	   background-color:rgb(0,0,100);
+	   color:rgb(255,255,255) ;
+	 }
+
+	section{
+	 display: flex ;
+	}
+	article{
+	 font-family: 'ciclefina' , '黑体';
+	 border:1px solid rgb(50,150,50);
+	 padding:5px;
+	 text-align:justify;
+	 line-height:1.5;
+     color:rgb(0,100,0) ;
+	}
+	article#help{
+	 flex: 1 ;
+	}
+	article#word{
+	 flex: 2;
+	 text-align:center;
+	}
+    article#word input#en{font-family: 'zantroke'}
+
+	footer{
+	font-family: 'zantroke','Arial Black';
+	background-color:rgb(0,50,0);
+	color:white;
+	font-size:1.2em;
+	text-align:center;
+	height:50px;
+	padding-top:15px;
+	}
+
+    article#word{
+	 text-align:center;
+	 cursor:pointer;
+	}
+	
+	article#word>input{
+	 width:90%; 
+	 font-family:'zant';
+	 color:rgb(200,0,0);
+     font-size:2.2em;
+	 text-align:center;
+	}
+	article#word p#pn{
+	 font-family:'Arial','ciclefina';
+	 color:rgb(0,150,0);
+	 font-size:2.5em;
+	 margin:0.5em auto;
+	}
+	article#word p#cn{
+	 font-family:'ciclefina', '黑体';
+	 font-size:1.5em;
+	 color:rgb(150,0,0);
+	 margin:0.5em auto;
+	}
+    article#help{
+	  position:relative;
+	  background-color:rgb(20,50,0);
+	  overflow:hidden;
+	   	} 
+	article#help div#backPic{
+	 position:absolute;
+	 width:98%;
+	 height:98%;
+	 left:1%;top:1%;
+	 z-index: 1 ;
+	}
+	article#help div#backPic img{
+	 width:100%;
+	 /*height:100%;如果设置这条，会照成窄屏幕出现图像变形*/
+	}
+	 article#help p#textInfo{
+	  position:absolute;
+	  color:white;
+	  font-size:1.3em;
+	  text-indent:2em;
+	  left:0.2em;
+	  top:35%;
+	  text-shadow:red 2px 1px ;
+	  z-index: 2 ;
+	  padding:1%;
+	 }
+    article#word p#pn p{
+	 font-size:0.4em;
+	 margin:0.1em auto ;
+	 border:1px solid black ;
+	}
+	article#word p#pn p:hover{
+	  background-color:rgb(100,200,200);
+     }
+  </style>
+  <script src="images/words.js">
+  </script>
+  <script type="text/javascript">
+  <!--
+
+  //设计“word对象”的数据结构，并用对象的方法实现初步的代码组织
+  //en6为全局变量，由大学英语6级词汇形成字符串，组成数组
+   var myWord = {
+	  id: 0 ,
+	  en: "" ,
+	  pn: "" ,
+	  cn: "" ,
+      getWord: function(id){
+  	    this.id = id;
+  		var s = en6[id].split("/") ;
+  		this.en = s[0];
+  		this.pn = s[1];
+  		this.cn = "" ;
+        for (var i=2 ; i < s.length; i++){
+           this.cn += s[i] ;
+         }
+	  },//end of getWord Method
+	 showWord : function(id){
+		 this.id = id;
+		 myWord.getWord(id);
+		 var enDom = my$("article#word input#en"); 
+         var pnDom = my$("article#word p#pn");
+  	     var cnDom = my$("article#word p#cn");
+		 enDom.value = myWord.en;
+		 pnDom.textContent = myWord.pn;
+		 cnDom.textContent = myWord.cn;
+	 } //end of showWord Method
+   };//end of myWord Object
+
+//建立一个模型对象，模拟和记录APP的运行状态
+  var Model = {
+    learnWords : [] , //学习单词的id组成的数组
+	learnId : 0 ,
+	status: "" ,
+	myImages: null ,
+    showHelp: function(){
+	 var helpInfoDom = my$("article#help p#textInfo") ;
+	 var helpInfo = "" ;
+	 switch (this.status){
+	  case "" : helpInfo = "You have not set any button of the Menu Bar . " ; break ;
+      case "read" : helpInfo = "You have set " + "读一读" + " . 已经为您选择10个单词，点击单词区继续……" ; break ;
+	  case "write" : helpInfo = "You have set " + "写一写" + " .输入单词后点击确认按钮查看结果，绿色表示正确，黄色表示错误。点击下一个按钮，切换单词。" ; break ;
+      case "select" : helpInfo = "You have set " + "选一选" + " .点击中文选项回答，点击下一个切换单词……" ; break ;
+	  case "search" : helpInfo =  "You have set " + "\"搜一搜\"模式！" + "输入你要搜的英文，点击确认按钮，确认即可" ; break ;
+      case "listen" : helpInfo = "You have set " + "听一听" + " button of the Menu Bar .但这个功能正在开发…… " ; break ;
+	 }
+	 helpInfoDom.textContent = helpInfo ;
+	 //为每次反馈的帮助，换一个图片背景
+	 var backPicDom =  my$("article#help div#backPic") ;
+     var randInt =  Math.floor(Math.random()*7) ;
+	 var childDom = backPicDom.querySelector("img");
+     backPicDom.removeChild(childDom);
+     backPicDom.appendChild(this.myImages[randInt]);
+	},//End of showHelp
+  }; //End of  Model 
+
+   for (var i=0; i < 10; i++){
+	   var randInt = Math.floor(Math.random()*en6.length) ;
+       Model.learnWords.push(randInt);
+   }//每次循环产生10个随机单词放在 Model 模型中
+
+  
+   window.onload = function(){
+//动态控制UI，包括：针对不同屏幕的字体大小设置，主区域的高度设置
+    var fontSize =  Math.floor(window.innerWidth/100) ;
+	
+	switch (fontSize){
+     case 17 :	 case 16 :	 case 15 : 
+	 case 14 :	 case 13 : 	 case 12 :
+	 case 11 : fontSize =  fontSize*1.5 ; break;
+     case 10 : 
+     case 9 :  fontSize =  fontSize*1.8 ; break;
+     case 8 :  
+     case 7 :  fontSize =  fontSize*2 ; break;
+     case 6 :  
+     case 5 :  fontSize =  fontSize*2.5 ; break;
+     case 4 : 
+	 case 3 : fontSize =  fontSize*3 ; break;
+	 default: fontSize =  fontSize*3; 
+	}
+	document.body.style.fontSize = fontSize + "px" ;
+   
+   var sectionHeight =  window.innerHeight - 150 - 50 - 30 ;//让section尽量填满剩余的纵向空间，最后的30这个数字没有依据，仅凭经验来设置为30px。
+   document.querySelector("section").style.height = sectionHeight + "px";
+ 
+ //为所有自定义的按钮设定特殊风格
+   var Buttons = my$("nav span");
+   for (var i=0; i<Buttons.length ; i++) {
+	   Buttons[i].onclick = function(){
+	     for (var j=0; j<Buttons.length ; j++){
+			 Buttons[j].className = "" ;
+	     }
+		this.className = "onclickStyle" ;
+	   };//end of  Buttons[i].onclick
+   }
+ 
+   //每次打开页面，则随机出现一张图片
+   var myImages = [] ;//图像对象 组成的 数组
+   for (var i=1; i<8; i++ ){
+	   var img = new Image();
+	   img.src = "images/" + "201930510" + i + ".jpg" ;
+	   //img.style.opacity = "0.5" ;
+	   myImages.push(img) ;
+   }
+       Model.myImages = myImages ;//把图片集传给Model对象，提供使用
+   var backPicDom =  my$("article#help div#backPic") ;
+   var randInt =  Math.floor(Math.random()*7) ;
+   backPicDom.appendChild(myImages[randInt]);
+
+
+  var h1Dom = my$("article#word h1");
+  var enDom = my$("article#word input#en");
+  var pnDom = my$("article#word p#pn");
+  var cnDom = my$("article#word p#cn");
+  var okDom = my$("article#word nav span#ok");
+  var nextDom = my$("article#word nav span#next");
+  my$("nav span#read").addEventListener("click", function(){
+	 Model.status = this.id ;
+	 Model.showHelp();
+ 	 okDom.onclick = function(){};//读一读没有确认需求，清除其他模式的，确认按钮代码
+	 document.querySelector("article#word input#en").style.color = "red";
+	 Model.learnId = 0;
+	 var id = Model.learnWords[Model.learnId];
+	 Model.learnId++;
+	 h1Dom.textContent = Model.learnId + "、当前单词ID:" + id;
+	 myWord.getWord(id);
+	 myWord.showWord(id);
+	 nextDom.onclick = function(){
+		 if (Model.learnId >= 10)
+		 {
+			 Model.learnId = 0;
+		 }
+		 id = Model.learnWords[Model.learnId];
+		 Model.learnId++;
+		 h1Dom.textContent = Model.learnId + "、当前单词ID:" + id;
+		 myWord.getWord(id);
+		 myWord.showWord(id);
+	 };
+  },false);//读一读
+ 
+  my$("nav span#write").addEventListener("click", function(){
+	 Model.status = this.id ;
+	 Model.showHelp();
+	 h1Dom.textContent = "当前单词";
+	 //从Model的LearnWords中随机选取单词
+	 var randInt = Math.floor(Math.random()*Model.learnWords.length);
+	 myWord.getWord(Model.learnWords[randInt]);
+	 myWord.showWord(Model.learnWords[randInt]);
+	 enDom.value = "";
+	 okDom.onclick = function(){
+		 if (enDom.value == myWord.en)
+		 {
+			 document.querySelector("article#word input#en").style.color = "green";
+			 h1Dom.textContent = "当前单词:" + myWord.en;
+		 }
+		 else{
+				document.querySelector("article#word input#en").style.color = "yellow";
+				enDom.value += "错误";
+				h1Dom.textContent = "当前单词:" + myWord.en;
+		 }
+	 };//end of okDom.onclick
+	 nextDom.onclick = function(){
+		 document.querySelector("article#word input#en").style.color = "red";
+		 var randInt = Math.floor(Math.random()*Model.learnWords.length);
+		 myWord.getWord(Model.learnWords[randInt]);
+		 myWord.showWord(Model.learnWords[randInt]);
+		 enDom.value = "";
+		 h1Dom.textContent = "当前单词";
+	 };//end of nextDom.onclick
+	},false);//写一写
+  my$("nav span#select").addEventListener("click", function(){
+	 choose();
+	 Model.status = this.id ;
+	 Model.showHelp();
+	 okDom.onclick = function(){};
+	 function choose(){
+	 Model.status = "select" ;
+	 Model.showHelp();
+	 //随机选择一个单词作为题目
+	 var randInt = Math.floor(Math.random()*Model.learnWords.length);
+	 myWord.getWord(Model.learnWords[randInt]);
+	 enDom.value = myWord.en;
+	 pnDom.textContent = "";
+	 cnDom.textContent = "";
+	 h1Dom.textContent = "当前单词";
+	 //创建四个选项
+	 var DomA = document.createElement("p");
+	 var DomB = document.createElement("p");
+	 var DomC = document.createElement("p");
+	 var DomD = document.createElement("p");
+	 pnDom.appendChild(DomA);
+	 pnDom.appendChild(DomB);
+	 pnDom.appendChild(DomC);
+	 pnDom.appendChild(DomD);
+	 //对四个选项赋值
+	 var meaning = [];//单词意思
+	 var correct;
+	 for (var i = 0;i < Model.learnWords.length;i++){
+		 myWord.getWord(Model.learnWords[i]);
+		 if (enDom.value == myWord.en)
+		 {
+			 //给出正确答案
+			 correct = myWord.cn;
+		 }
+	 	 meaning.push(myWord.cn);
+	 }
+	 DomA.textContent = meaning[Math.floor(Math.random()*meaning.length)];
+	 DomB.textContent = meaning[Math.floor(Math.random()*meaning.length)];
+	 DomC.textContent = meaning[Math.floor(Math.random()*meaning.length)];
+	 DomD.textContent = meaning[Math.floor(Math.random()*meaning.length)];
+	 //将正确答案随机放入一个选项
+	 var arr = [DomA.textContent,DomB.textContent,DomC.textContent,DomD.textContent];
+	 var index = Math.floor(Math.random()*arr.length);
+	 arr.splice(index,1,correct);
+	 DomA.textContent = arr[0];
+	 DomB.textContent = arr[1];
+	 DomC.textContent = arr[2];
+	 DomD.textContent = arr[3];
+	 //实现选择测试
+	 DomA.onclick = test;
+	 DomB.onclick = test;
+	 DomC.onclick = test;
+	 DomD.onclick = test;
+	 function test(){
+			var a = this.textContent;
+			if (a === correct)
+			{
+				h1Dom.textContent = "恭喜你，你答对了！";
+			}else{
+				h1Dom.textContent = "你答错了，正确答案是：" + correct;
+			}
+	 };//end of test
+	 nextDom.onclick = choose;
+	 }//end of choose
+	},false);//选一选
+
+  my$("nav span#search").addEventListener("click", function(){
+	 Model.status = this.id ;
+	 Model.showHelp();
+	 enDom.value = "";
+	 pnDom.textContent = "";
+	 cnDom.textContent = "";
+	 h1Dom.textContent = "当前单词";
+ 	 okDom.onclick = function(){
+		 h1Dom.textContent = "你正在搜: " + enDom.value ;
+		 for (var i = 0;i < en6.length;i++)
+		 {
+			 myWord.getWord(i);
+			 if (enDom.value == myWord.en)
+			 {
+				 myWord.showWord(i);
+			 }else{
+					//pDom.textContent = "查询失败！";
+			 }
+		 }
+     }//end of okDom.onclick
+     nextDom.onclick = function(){};
+  	},false);//end of  搜一搜
+
+  my$("nav span#listen").addEventListener("click", function(){
+	 Model.status = this.id ;
+	 Model.showHelp();
+	 h1Dom.textContent = "此功能暂未开发，敬请期待！";
+	 enDom.value = "";
+	 pnDom.textContent = "";
+	 cnDom.textContent = "";
+	},false);//
+   //实现脚步信息，对当前时间反馈
+   var myDate = new Date();
+   my$("footer").textContent += myDate.getFullYear() +'年' + (myDate.getMonth()+1) +'月' + myDate.getDate() +'日'; 
+ 
+   };//end of window.onload
+
+  /***自定义的通用函数my$：引用Web页上的Dom元素API有二个，querySelectorAll和querySelector，API名称不好拼写，本函数可以合并这二个API的功能，并简化代码的编写****/
+  function my$(para){
+	if(!para){
+	  throw para + " : wrong Selector para,you get nothing !" ;
+	}
+   var dom = document.querySelectorAll(para) ;
+   if (dom.length > 1){
+	   console.log("you get Dom Array list reference.");
+	   return dom ;
+   }else{
+     dom = document.querySelector(para) ;
+	 if (dom){
+       console.log("you get a Dom reference.");
+       return dom ;
+	 }else{
+	   throw para + " : wrong Selector para,you get nothing !" ;
+	 }
+   }
+  }//end of my$
+ 
+
+  //-->
+  </script>
+ </head>
+ <body>
+  <header> 
+   <h1>Words Learning App <span>（大学英语6级）</span></h1>
+   <nav>
+    <span   id="read">读一读</span>
+    <span   id="write">写一写</span>
+    <span   id="select">选一选</span>
+    <span   id="search">搜一搜</span>
+    <span   id="listen">听一听</span>
+   </nav>
+  </header>
+  <section>
+    <article id = "help">
+	  <p id="textInfo">
+     Photo from the movie of "Pride And Prejudice ",
+	 请选择上面状态按钮，进入相应学习单词的模式。
+	 </p>
+	 <div id="backPic" >
+	 </div>
+	</article>
+	<article id = "word">
+	  <h1>当前单词</h1>
+	  <input id="en" type="text" value="ability">
+	  <p id="pn">/ ə'biliti /</p>
+	  <p id="cn">n.能力；本领；才能，才干；专门技能，天资</p>
+	  <nav>
+	   <span id="ok">确认</span>
+	   <span id = "next">下一个</span>
+	  </nav>
+    </article>
+  </section>
+  <footer>
+    Code By 肖李花 of 19软件开发2班  on
+  </footer>
+ </body>
+</html>
